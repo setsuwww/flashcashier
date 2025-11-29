@@ -29,11 +29,11 @@ const Input: React.FC<InputProps> = ({ label, type = 'text', name, value, onChan
         </div>
       ) : (
         <input type={type} value={value} name={name} accept={accept} onChange={onChange} placeholder={placeholder} disabled={disabled}
-          className={`w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 ${disabled
-            ? 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed text-gray-500'
-            : 'bg-white text-gray-900 dark:text-white'
-          } ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'} ${className}`}
-        />
+          className={`w-full mt-1 px-3 py-2 text-sm text-gray-900 border border-gray-200 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 ${disabled
+            ? 'bg-gray-100 cursor-not-allowed text-gray-500'
+            : 'bg-white'
+  }        ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'} ${className}`}
+          />
       )}
 
       {error && (

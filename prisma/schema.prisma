@@ -6,34 +6,99 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
-
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  role      String   @default("user")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  email       String   @unique
+  password    String
+  role        Role     @default(USER)
+  merchant    Merchant @relation(fields: [merchantId], references: [id])
+  merchantId  String
+  createdAt   DateTime @default(now())
 }
 
-model ProductCategory {
-  id       Int       @id @default(autoincrement())
-  name     String    @unique
-  products Product[] 
+model Merchant {
+  id          String       @id @default(cuid())
+  name        String
+  subdomain   String       @unique
+  plan        Plan         @default(FREE)
+  users       User[]
+  categories  Category[]
+  products    Product[]
+  customFields CustomField[]
+  transactions Transaction[]
+  createdAt   DateTime     @default(now())
+}
+
+model Category {
+  id          String      @id @default(cuid())
+  name        String
+  merchant    Merchant    @relation(fields: [merchantId], references: [id])
+  merchantId  String
+  products    Product[]
+  customFields CustomField[]
+  createdAt   DateTime    @default(now())
 }
 
 model Product {
-  id           Int              @id @default(autoincrement())
-  image        String
-  name         String
-  description  String
-  type         Type
-  price        Int
-  categoryId   Int             
-  category     ProductCategory  @relation(fields: [categoryId], references: [id])
+  id          String           @id @default(cuid())
+  title       String
+  price       Float
+  description String?
+  imageUrl    String?
+  merchant    Merchant         @relation(fields: [merchantId], references: [id])
+  merchantId  String
+  category    Category?        @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+  customData  ProductCustomData[]
+  createdAt   DateTime         @default(now())
 }
 
-enum Type {
-  makanan
-  minuman
+model CustomField {
+  id          String      @id @default(cuid())
+  name        String
+  type        FieldType
+  required    Boolean     @default(false)
+  merchant    Merchant    @relation(fields: [merchantId], references: [id])
+  merchantId  String
+  category    Category?   @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+  productData ProductCustomData[]
+  createdAt   DateTime    @default(now())
+}
+
+model ProductCustomData {
+  id           String      @id @default(cuid())
+  product      Product     @relation(fields: [productId], references: [id])
+  productId    String
+  customField  CustomField @relation(fields: [customFieldId], references: [id])
+  customFieldId String
+  value        String
+}
+
+model Transaction {
+  id          String      @id @default(cuid())
+  merchant    Merchant    @relation(fields: [merchantId], references: [id])
+  merchantId  String
+  totalPrice  Float
+  items       Json
+  createdAt   DateTime    @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Plan {
+  FREE
+  BASIC
+  PRO
+}
+
+enum FieldType {
+  TEXT
+  NUMBER
+  SELECT
+  DATE
 }
