@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
       <Sidebar isCollapsed={isSidebarCollapsed} onToggle={handleToggleSidebar} />
       <div className="flex-1 flex flex-col p-4 bg-gradient-to-b from-gray-200 via-gray-300 to-gray-200">
         <Header onLogout={handleLogout} />
-        <main className="flex-1 p-6 bg-gray-100 dark:bg-gray-900 overflow-auto">
+        <main className="flex-1 p-6 bg-gray-100 overflow-auto">
           <div className="p-2">
             {children}
           </div>
